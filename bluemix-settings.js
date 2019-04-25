@@ -88,29 +88,34 @@ var settings = module.exports = {
 settings.couchAppname = appEnv.name;
 // settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g,"_");
 settings.couchDb = serviceManager.get("cloudant");
+// var couchService = serviceManager.get("cloudant");
 
 if (!settings.couchDb) {
     util.log("THERE IS NO COUCHDB")
 }
 else {
-    util.log("*** url: " + IBMCloudEnv.getString("cloudant-url"));
+    util.log("Using Cloudant service!!");
+    util.log("*** url: " + IBMCloudEnv.getString('cloudant_url'));
+    settings.storageModule = require("./couchstorage");
+    settings.couchUrl = IBMCloudEnv.getString('cloudant_url'); //couchService.credentials.url;
+    util.log("*** settings.couchUrl: " + settings.couchUrl);
 }
 
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
 // var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
 // var couchService = appEnv.getService(storageServiceName);
-var couchService = serviceManager.get("cloudant");
+// var couchService = serviceManager.get("cloudant");
 
-if (!couchService) {
-    util.log("Failed to find Cloudant service");
-    // if (process.env.NODE_RED_STORAGE_NAME) {
-    //     util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
-    // }
-    //fall back to localfilesystem storage
-} 
-else {
-    util.log("Using Cloudant service!!");
-    settings.storageModule = require("./couchstorage");
-    settings.couchUrl = couchService.credentials.url;
-    util.log("*** settings.couchUrl: " + settings.couchUrl);
-}
+// if (!couchService) {
+//     util.log("Failed to find Cloudant service");
+//     // if (process.env.NODE_RED_STORAGE_NAME) {
+//     //     util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
+//     // }
+//     //fall back to localfilesystem storage
+// } 
+// else {
+//     util.log("Using Cloudant service!!");
+//     settings.storageModule = require("./couchstorage");
+//     settings.couchUrl = couchService.credentials.url;
+//     util.log("*** settings.couchUrl: " + settings.couchUrl);
+// }
