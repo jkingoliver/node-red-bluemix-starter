@@ -76,6 +76,7 @@ var couchstorage = {
         var couchDb = nano(settings.couchUrl);
         appname = settings.couchAppname || require('os').hostname();
         var dbname = settings.couchDb||"nodered";
+        util.log("** dbname: "+dbname  );
 
         return when.promise(function(resolve,reject) {
             couchDb.db.get(dbname,function(err,body) {

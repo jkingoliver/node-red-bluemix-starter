@@ -19,7 +19,6 @@ var bcrypt = require("bcrypt");
 var util = require("util");
 var path = require("path");
 
-
 util.log("Starting Node-RED on IBM Cloud bootstrap");
 util.log("Loading bluemix-settings.js");
 var settings = require("./bluemix-settings.js");
@@ -27,10 +26,13 @@ var settings = require("./bluemix-settings.js");
 if (!settings.adminAuth) {
     // No user-defined security
     var storage;
+    // Question: is this all for local dev?
     if (settings.storageModule) {
         storage = settings.storageModule;
     } else {
-        storage = require('./node_modules/node-red/red/runtime/storage/localfilesystem');
+        // storage = require('./node_modules/node-red/red/runtime/storage/localfilesystem');
+        util.log("CAN'T FIND STORAGE")
+
     }
     util.log("Loading application settings");
     storage.init(settings).then(storage.getSettings).then(function(runtimeSettings) {

@@ -22,6 +22,9 @@ var fs = require("fs");
 var cfenv = require("cfenv");
 var appEnv = cfenv.getAppEnv();
 
+const serviceManager = require('./server/services/service-manager');
+// require('./services/service-index')(app);
+
 var userDir = path.join(__dirname,".node-red");
 // Ensure userDir exists - something that is normally taken care of by
 // localfilesystem storage when running locally
@@ -81,20 +84,31 @@ var settings = module.exports = {
 
 // Look for the attached Cloudant instance to use for storage
 settings.couchAppname = appEnv.name;
-settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g,"_");
+// settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g,"_");
+settings.couchDb = serviceManager.get("cloudant");
+
+if (!settings.couchDb) {
+    util.log("THERE IS NO COUCHDB")
+}
+else {
+    util.log("*** url: " + settings.couchDb.cloudant_url);
+}
 
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
-var couchService = appEnv.getService(storageServiceName);
+// var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
+// var couchService = appEnv.getService(storageServiceName);
+var couchService = serviceManager.get("cloudant");
 
 if (!couchService) {
-    util.log("Failed to find Cloudant service: "+storageServiceName);
-    if (process.env.NODE_RED_STORAGE_NAME) {
-        util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
-    }
+    util.log("Failed to find Cloudant service");
+    // if (process.env.NODE_RED_STORAGE_NAME) {
+    //     util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
+    // }
     //fall back to localfilesystem storage
-} else {
-    util.log("Using Cloudant service: "+storageServiceName+" : "+settings.couchAppname);
+} 
+else {
+    util.log("Using Cloudant service!!");
     settings.storageModule = require("./couchstorage");
     settings.couchUrl = couchService.credentials.url;
+    util.log("*** settings.couchUrl: " + settings.couchUrl);
 }
