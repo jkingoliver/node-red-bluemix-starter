@@ -90,6 +90,9 @@ util.log("**** appname: " + settings.couchAppname)
 settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g,"_");
 util.log("*** couchDb: " + settings.couchDb);
 
+util.log("*** services? " + JSON.stringify(appEnv));
+util.log("*** process.env? " + JSON.stringify(process.env));
+
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
 var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
 var couchService = appEnv.getService(storageServiceName);
