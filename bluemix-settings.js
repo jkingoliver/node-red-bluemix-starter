@@ -22,8 +22,10 @@ var fs = require("fs");
 var cfenv = require("cfenv");
 var appEnv = cfenv.getAppEnv();
 
+var IBMCloudEnv = require('ibm-cloud-env');
 const serviceManager = require('./server/services/service-manager');
 require('./server/services/service-index')();
+IBMCloudEnv.init();
 
 var userDir = path.join(__dirname,".node-red");
 // Ensure userDir exists - something that is normally taken care of by
