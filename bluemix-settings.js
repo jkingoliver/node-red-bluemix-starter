@@ -94,7 +94,7 @@ util.log("*** services? " + JSON.stringify(appEnv));
 util.log("*** process.env? " + JSON.stringify(process.env));
 
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
+var storageServiceName = process.env.NODE_RED_STORAGE_NAME || "cloudantNoSQLDB";//new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
 var couchService = appEnv.getService(storageServiceName);
 util.log("*** storageServiceName: " + storageServiceName);
 
