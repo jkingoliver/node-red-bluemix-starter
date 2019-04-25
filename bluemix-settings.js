@@ -23,7 +23,7 @@ var cfenv = require("cfenv");
 var appEnv = cfenv.getAppEnv();
 
 const serviceManager = require('./server/services/service-manager');
-// require('./services/service-index')(app);
+require('./server/services/service-index')();
 
 var userDir = path.join(__dirname,".node-red");
 // Ensure userDir exists - something that is normally taken care of by
@@ -91,7 +91,7 @@ if (!settings.couchDb) {
     util.log("THERE IS NO COUCHDB")
 }
 else {
-    util.log("*** url: " + settings.couchDb.cloudant_url);
+    util.log("*** url: " + IBMCloudEnv.getString("cloudant-url"));
 }
 
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
