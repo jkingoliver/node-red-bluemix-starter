@@ -101,7 +101,7 @@ util.log("** is this the first? " + JSON.stringify(svs));
 // var storageServiceName = process.env.NODE_RED_STORAGE_NAME || "nodered1test-cloudant-1556208538995";//new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
 // var couchService = appEnv.getService(storageServiceName);
 var services = _.values(appEnv.getServices());
-var couchService = _.filter(services, { label: 'cloudantNoSQLDB'})
+var couchService = _.filter(services, { label: 'cloudantNoSQLDB'})[0];
 
 // util.log("*** storageServiceName: " + storageServiceName);
 
@@ -112,7 +112,7 @@ if (!couchService) {
     }
     //fall back to localfilesystem storage
 } else {
-    util.log("is it an array? couchservice.length" + couchService.length);
+    // util.log("is it an array? couchservice.length" + couchService.length);
     // util.log("Using Cloudant service: "+storageServiceName+" : "+settings.couchAppname);
     util.log("*** got couchService")
     settings.storageModule = require("./couchstorage");
