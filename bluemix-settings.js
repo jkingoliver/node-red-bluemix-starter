@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, 2017 IBM Corp.
+ * Copyright 2014, 2017, 2019 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
  **/
 
 var path = require("path");
-var when = require("when");
 var util = require("util");
 var fs = require("fs");
-
+var _ = require("lodash");
 var cfenv = require("cfenv");
+
 var appEnv = cfenv.getAppEnv();
 
-var userDir = path.join(__dirname,".node-red");
+var userDir = path.join(__dirname, ".node-red");
 // Ensure userDir exists - something that is normally taken care of by
 // localfilesystem storage when running locally
-if(!fs.existsSync(userDir)) fs.mkdirSync(userDir);
-if(!fs.existsSync(path.join(userDir,"node_modules"))) fs.mkdirSync(path.join(userDir,"node_modules"));
+if (!fs.existsSync(userDir)) fs.mkdirSync(userDir);
+if (!fs.existsSync(path.join(userDir, "node_modules"))) fs.mkdirSync(path.join(userDir, "node_modules"));
 
 var settings = module.exports = {
     uiPort: process.env.PORT || 1880,
     mqttReconnectTime: 15000,
     debugMaxLength: 1000,
-    
+
     //Flag for enabling Appmetrics dashboard (https://github.com/RuntimeTools/appmetrics-dash)
     useAppmetrics: false,
 
@@ -41,10 +41,10 @@ var settings = module.exports = {
     flowFile: "flows.json",
 
     // Add the bluemix-specific nodes in
-    nodesDir: path.join(__dirname,"nodes"),
+    nodesDir: path.join(__dirname, "nodes"),
 
     // Blacklist the non-bluemix friendly nodes
-    nodesExcludes:['66-mongodb.js','75-exec.js','35-arduino.js','36-rpi-gpio.js','25-serial.js','28-tail.js','50-file.js','31-tcpin.js','32-udp.js','23-watch.js'],
+    nodesExcludes: ['66-mongodb.js', '75-exec.js', '35-arduino.js', '36-rpi-gpio.js', '25-serial.js', '28-tail.js', '50-file.js', '31-tcpin.js', '32-udp.js', '23-watch.js'],
 
     // Enable module reinstalls on start-up; this ensures modules installed
     // post-deploy are restored after a restage
@@ -54,9 +54,9 @@ var settings = module.exports = {
     httpAdminRoot: '/red',
 
     // Serve up the welcome page
-    httpStatic: path.join(__dirname,"public"),
+    httpStatic: path.join(__dirname, "public"),
 
-    functionGlobalContext: { },
+    functionGlobalContext: {},
 
     // Configure the logging output
     logging: {
@@ -81,20 +81,24 @@ var settings = module.exports = {
 
 // Look for the attached Cloudant instance to use for storage
 settings.couchAppname = appEnv.name;
-settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g,"_");
+util.log("**** appname: " + settings.couchAppname)
+settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g, "_");
+util.log("*** couchDb: " + settings.couchDb);
 
-// NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
-var couchService = appEnv.getService(storageServiceName);
+// util.log("*** services? " + JSON.stringify(appEnv));
+
+var services = _.values(appEnv.getServices());
+var couchService = _.filter(services, { label: 'cloudantNoSQLDB' })[0];
 
 if (!couchService) {
-    util.log("Failed to find Cloudant service: "+storageServiceName);
+    util.log("Failed to find Cloudant service with label cloudantNoSQLDB ");
+    // this looks like it only logs a statement, should it do something else?
     if (process.env.NODE_RED_STORAGE_NAME) {
-        util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
+        util.log(" - using NODE_RED_STORAGE_NAME environment variable: " + process.env.NODE_RED_STORAGE_NAME);
     }
-    //fall back to localfilesystem storage
+    //fall back to localfilesystem storage?
 } else {
-    util.log("Using Cloudant service: "+storageServiceName+" : "+settings.couchAppname);
+    util.log("Using Cloudant service: " + couchService.name + " : " + settings.couchAppname);
     settings.storageModule = require("./couchstorage");
     settings.couchUrl = couchService.credentials.url;
 }
