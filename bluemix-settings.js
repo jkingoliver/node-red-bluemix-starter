@@ -18,6 +18,7 @@ var path = require("path");
 var when = require("when");
 var util = require("util");
 var fs = require("fs");
+var _ = require("lodash");
 
 var cfenv = require("cfenv");
 var appEnv = cfenv.getAppEnv();
