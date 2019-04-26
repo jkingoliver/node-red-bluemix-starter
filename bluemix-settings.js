@@ -97,18 +97,25 @@ util.log("** is this the first? " + JSON.stringify(svs));
 // util.log("** is this the first NAME? " + JSON.stringify(svs[0]).name);
 
 // NODE_RED_STORAGE_NAME is automatically set by this applications manifest.
-var storageServiceName = process.env.NODE_RED_STORAGE_NAME || "nodered1test-cloudant-1556208538995";//new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
-var couchService = appEnv.getService(storageServiceName);
-util.log("*** storageServiceName: " + storageServiceName);
+// var storageServiceName = process.env.NODE_RED_STORAGE_NAME || "nodered1test-cloudant-1556208538995";//new RegExp("^"+settings.couchAppname+".cloudantNoSQLDB");
+// var couchService = appEnv.getService(storageServiceName);
+var services = _.values(appEnv.getServices());
+var couchService = _.filter(services, { label: 'cloudantNoSQLDB'})
+
+// util.log("*** storageServiceName: " + storageServiceName);
 
 if (!couchService) {
-    util.log("Failed to find Cloudant service: "+storageServiceName);
+    util.log("Failed to find Cloudant service with label cloudantNoSQLDB "); //+storageServiceName);
     if (process.env.NODE_RED_STORAGE_NAME) {
         util.log(" - using NODE_RED_STORAGE_NAME environment variable: "+process.env.NODE_RED_STORAGE_NAME);
     }
     //fall back to localfilesystem storage
 } else {
-    util.log("Using Cloudant service: "+storageServiceName+" : "+settings.couchAppname);
+    util.log("is it an array? couchservice.length" + couchService.length);
+    // util.log("Using Cloudant service: "+storageServiceName+" : "+settings.couchAppname);
+    util.log("*** got couchService")
     settings.storageModule = require("./couchstorage");
     settings.couchUrl = couchService.credentials.url;
+    util.log("*** url: " + settings.couchUrl);
+
 }
