@@ -26,11 +26,11 @@ var settings = require("./bluemix-settings.js");
 if (!settings.adminAuth) {
     // No user-defined security
     var storage;
-    // Question: is this all for local dev?
     if (settings.storageModule) {
         storage = settings.storageModule;
     } else {
         // storage = require('./node_modules/node-red/red/runtime/storage/localfilesystem');
+        storage = require('./node_modules/@node-red/registry/lib/localfilesystem');
         util.log("CAN'T FIND STORAGE")
 
     }
