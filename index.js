@@ -88,6 +88,9 @@ if (!settings.adminAuth) {
                 });
             });
             app.use("/",express.static(path.join(__dirname,"public")));
+            
+            require('./routers/health')(app);
+            
             var http = require('http');
             server = http.createServer(function(req,res) {app(req,res);});
             server = require('http-shutdown')(server);
@@ -95,7 +98,7 @@ if (!settings.adminAuth) {
             util.log("Waiting for first-use setup to complete");
         }
     }).otherwise(function(err) {
-        console.log("Failed to initialise storage module");
+        console.log("Failed to initialize storage module");
         console.log(err);
     });
 } else {
