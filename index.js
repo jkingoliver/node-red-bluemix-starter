@@ -30,6 +30,7 @@ if (!settings.adminAuth) {
         storage = settings.storageModule;
     } else {
         storage = require('./node_modules/@node-red/runtime/lib/storage/localfilesystem');
+
     }
     util.log("Loading application settings");
     storage.init(settings).then(storage.getSettings).then(function(runtimeSettings) {
