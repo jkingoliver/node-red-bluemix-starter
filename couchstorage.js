@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, 2017 IBM Corp.
+ * Copyright 2014, 2017, 2019 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ var couchstorage = {
         var couchDb = nano(settings.couchUrl);
         appname = settings.couchAppname || require('os').hostname();
         var dbname = settings.couchDb||"nodered";
-        util.log("** dbname: "+dbname  );
+        util.log("dbname: "+dbname  );
 
         return when.promise(function(resolve,reject) {
             couchDb.db.get(dbname,function(err,body) {

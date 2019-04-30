@@ -81,22 +81,19 @@ var settings = module.exports = {
 
 // Look for the attached Cloudant instance to use for storage
 settings.couchAppname = appEnv.name;
-util.log("**** appname: " + settings.couchAppname)
+util.log("Setting couchAppname: " + settings.couchAppname)
 settings.couchDb = process.env.NODE_RED_STORAGE_DB_NAME || appEnv.name.replace(/[^a-z0-9_$()+/-]/g, "_");
-util.log("*** couchDb: " + settings.couchDb);
-
-// util.log("*** services? " + JSON.stringify(appEnv));
+util.log("Setting CouchDb: " + settings.couchDb);
 
 var services = _.values(appEnv.getServices());
 var couchService = _.filter(services, { label: 'cloudantNoSQLDB' })[0];
 
 if (!couchService) {
     util.log("Failed to find Cloudant service with label cloudantNoSQLDB ");
-    // this looks like it only logs a statement, should it do something else?
     if (process.env.NODE_RED_STORAGE_NAME) {
         util.log(" - using NODE_RED_STORAGE_NAME environment variable: " + process.env.NODE_RED_STORAGE_NAME);
     }
-    //fall back to localfilesystem storage?
+    // fall back to localfilesystem storage
 } else {
     util.log("Using Cloudant service: " + couchService.name + " : " + settings.couchAppname);
     settings.storageModule = require("./couchstorage");

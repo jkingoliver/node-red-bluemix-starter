@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 IBM Corp.
+ * Copyright 2017, 2019 IBM Corp.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,7 @@ if (!settings.adminAuth) {
     if (settings.storageModule) {
         storage = settings.storageModule;
     } else {
-        // storage = require('./node_modules/node-red/red/runtime/storage/localfilesystem');
-        storage = require('./node_modules/@node-red/registry/lib/localfilesystem');
-        util.log("CAN'T FIND STORAGE")
-
+        storage = require('./node_modules/@node-red/runtime/lib/storage/localfilesystem');
     }
     util.log("Loading application settings");
     storage.init(settings).then(storage.getSettings).then(function(runtimeSettings) {
