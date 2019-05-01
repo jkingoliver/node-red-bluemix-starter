@@ -3,10 +3,7 @@ Node-RED IBM Cloud Starter Application
 
 ### Node-RED on IBM Cloud
 
-This Node-RED application can be deployed into IBM Cloud with a few clicks. Use the link below to navigate to the IBM Cloud Starter Kit console and select the `Node-RED` Starter Kit tile. After you create your app, set up continuous delivery with a DevOps toolchain to deploy your app to IBM Cloud. The code from this repo will be automatically cloned and an instance of Cloudant will be provisioned and bound to your Node-RED application. This is where your Node-RED instance will store its data.
-
-[![Deploy to IBM Cloud]](https://cloud.ibm.com/developer/appservice/starter-kits)
-
+This Node-RED application can be deployed into IBM Cloud with a few clicks. Use this link to navigate to the [IBM Cloud Starter Kit console](https://cloud.ibm.com/developer/appservice/starter-kits) and select the `Node-RED` Starter Kit tile. After you create your app, set up continuous delivery with a DevOps toolchain to deploy your app to IBM Cloud. The code from this repo will be automatically cloned and an instance of Cloudant will be provisioned and bound to your Node-RED application. This is where your Node-RED instance will store its data.
 
 ### How does this work?
 
